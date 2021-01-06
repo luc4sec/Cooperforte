@@ -12,13 +12,14 @@ if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
         echo ""
 elif [ "$1" == "install" ]; then
         if [ `whoami` == 'root' ]; then
-		echo "Atualizando pacotes"
+		echo "---Atualizando pacotes---"
 		sudo apt update; sudo apt list --upgradable; sudo apt upgrade -y; sudo apt autoremove -y
-                echo "Instalando aplicativos..."
+                echo "---Instalando aplicativos...---"
 		apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit
                 echo "Digite o usuário de rede: "
                 read user
                 realm join --user $user cooperforte.coop
+        echo "---Editando arquivo sssd.conf---"
 		mv /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
 		echo "
 [sssd]
@@ -39,7 +40,15 @@ use_fully_qualified_names = false
 fallback_homedir = /home/%u
 access_provider = ad
 ad_gpo_access_control = permissive" > /etc/sssd/sssd.conf
+		echo "---Editando common-session---"
+		##
 
+		echo "---Reiniciando sssd---"
+		systemctl restart sssd
+
+		echo "---Testando usuário de rede---"
+		#id lucas.nascimento > teste.txt
+		#if 
 		
         else
                 echo "É necessário logar com root (sudo ./setup install)"
