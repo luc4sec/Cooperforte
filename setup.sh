@@ -1,4 +1,5 @@
 #!/bin/bash
+#Vesion 0.1
 if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
         echo ""
         echo ""
