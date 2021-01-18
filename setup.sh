@@ -21,29 +21,18 @@ elif [ "$1" == "install" ]; then
                 realm join --user $user cooperforte.coop
         echo "---Editando arquivo sssd.conf---"
 		mv /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
-		echo "
-[sssd]
-domains = cooperforte.coop
-config_file_version = 2
-services = nss, pam
+		cp sssd.conf /etc/sssd/
 
-[domain/cooperforte.coop]
-default_shell = /bin/bash
-krb5_store_password_if_offline = True
-cache_credentials = True
-krb5_realm = COOPERFORTE.COOP
-realmd_tags = manages-system joined-with-adcli
-id_provider = ad
-fallback_homedir = /home/%u 
-ad_domain = cooperforte.coop
-use_fully_qualified_names = False
-ldap_id_mapping = True
-access_provider = ad" > /etc/sssd/sssd.conf
 		echo "---Editando common-session---"
-		##
+		mv /etc/pam.d/common-session /etc/pam.d/common-session.old
+		mv common-session /etc/pam.d/
 
 		echo "---Reiniciando sssd---"
 		systemctl restart sssd
+
+		echo "---Adicionando usuário como root---"
+		mv /etc/sudoers /etc/sudoers.old
+		mv sudoers /etc/
 
 		echo "---Testando usuário de rede---"
 		#id lucas.nascimento > teste.txt
