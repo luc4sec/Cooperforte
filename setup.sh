@@ -13,7 +13,7 @@ if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
 elif [ "$1" == "install" ]; then
         if [ `whoami` == 'root' ]; then
 		echo "---Atualizando pacotes---"
-		sudo apt update; sudo apt list --upgradable; sudo apt upgrade -y; sudo apt autoremove -y 1>> /registro.log
+		sudo apt update 1>> registro.log; sudo apt list --upgradable 1>> registro.log; sudo apt upgrade -y 1>> registro.log; sudo apt autoremove -y 1>> registro.log
         echo "---Instalando aplicativos...---"
 		apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit 1>> /registro.log
                 echo "Digite o usuário de rede: "
