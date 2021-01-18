@@ -1,5 +1,5 @@
 #!/bin/bash
-#Vesion 0.1
+#Vesion 1.2
 if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
         echo ""
         echo ""
@@ -13,9 +13,9 @@ if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
 elif [ "$1" == "install" ]; then
         if [ `whoami` == 'root' ]; then
 		echo "---Atualizando pacotes---"
-		sudo apt update; sudo apt list --upgradable; sudo apt upgrade -y; sudo apt autoremove -y
-                echo "---Instalando aplicativos...---"
-		apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit
+		sudo apt update; sudo apt list --upgradable; sudo apt upgrade -y; sudo apt autoremove -y 1>> /registro.log
+        echo "---Instalando aplicativos...---"
+		apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit 1>> /registro.log
                 echo "Digite o usuário de rede: "
                 read user
                 realm join --user $user cooperforte.coop
