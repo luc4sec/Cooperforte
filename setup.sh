@@ -28,18 +28,17 @@ config_file_version = 2
 services = nss, pam
 
 [domain/cooperforte.coop]
-ad_domain = cooperforte.coop
+default_shell = /bin/bash
+krb5_store_password_if_offline = True
+cache_credentials = True
 krb5_realm = COOPERFORTE.COOP
 realmd_tags = manages-system joined-with-adcli
-cache_credentials = True
 id_provider = ad
-krb5_store_password_if_offline = True
-default_shell = /bin/bash
-ldap_id_mapping = true
-use_fully_qualified_names = false
-fallback_homedir = /home/%u
-access_provider = ad
-ad_gpo_access_control = permissive" > /etc/sssd/sssd.conf
+fallback_homedir = /home/%u 
+ad_domain = cooperforte.coop
+use_fully_qualified_names = False
+ldap_id_mapping = True
+access_provider = ad" > /etc/sssd/sssd.conf
 		echo "---Editando common-session---"
 		##
 
