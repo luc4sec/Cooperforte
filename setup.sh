@@ -2,7 +2,6 @@
 #Vesion 1.2
 if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
         echo ""
-        echo ""
         echo "+============================================+"
         echo "| Automatizador de configuração ubuntu 20.04 |"
         echo "+============================================+"
@@ -25,16 +24,13 @@ elif [ "$1" == "install" ]; then
 
 		echo "---Editando common-session---"
 		mv /etc/pam.d/common-session /etc/pam.d/common-session.old
-		mv common-session /etc/pam.d/
-
-		echo "---Reiniciando sssd---"
-		systemctl restart sssd
+		echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
 
 		echo "---Adicionando usuário como root---"
 		mv /etc/sudoers /etc/sudoers.old
-		mv sudoers /etc/
+		echo "%desenlinux ALL=(ALL) ALL"
 
-		echo "---Testando usuário de rede---"
+		#echo "---Testando usuário de rede---"
 		#id lucas.nascimento > teste.txt
 		#if 
 		
