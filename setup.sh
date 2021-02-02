@@ -2,14 +2,21 @@
 #Vesion 1.2
 if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
         echo ""
-        echo "+============================================+"
-        echo "| Automatizador de configuração ubuntu 20.04 |"
-        echo "+============================================+"
-        echo "|    Modo de uso:~$ sudo chmod +x setup.sh   |"
-        echo "|                ~$ sudo ./setup.sh install  |"
-        echo "+============================================+"
-        echo ""
-elif [ "$1" == "install" ]; then
+        echo "
+Seja bem vindo ao script de primeiras configurações do S.O. Ubuntu
+
+			Escolha uma opção abaixo para começar!
+       			1 - Configurações iniciais do Sistema Operacional;
+       			2 - Verificar repositório do sistema;
+       			3 - Mostrar atualizações do sistema;
+       			4 - Instalar atualizações do sistema;
+       			5 - Limpar o sistema;
+       			6 - Remover pacotes não necessários;
+       			0 - Sair do sistema.
+      "
+# Abaixo, foi uma forma que encontrei de modular, precisamos melhorar essa parte.
+# A primeira opção é o programa completo, ele que é o carinha que vai fazer todas as configurações iniciais, os demais casos são para manutenção futura.
+elif [ "$#" == "install" ]; then
         if [ `whoami` == 'root' ]; then
 		echo "---Atualizando pacotes---"
 		sudo apt update 1>> registro.log; sudo apt list --upgradable 1>> registro.log; sudo apt upgrade -y 1>> registro.log; sudo apt autoremove -y 1>> registro.log
@@ -28,11 +35,11 @@ elif [ "$1" == "install" ]; then
 
 		echo "---Adicionando usuário como root---"
 		mv /etc/sudoers /etc/sudoers.old
-		echo "%desenlinux ALL=(ALL) ALL"
+		echo "%desenlinux ALL=(ALL) ALL" >> /etc/sudoers
 
 		#echo "---Testando usuário de rede---"
-		#id lucas.nascimento > teste.txt
-		#if 
+		id lucas.nascimento > teste.txt
+		
 		
         else
                 echo "É necessário logar com root (sudo ./setup install)"
