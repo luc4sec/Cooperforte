@@ -62,6 +62,8 @@ if [ "$1" != "" ]; then
 				"-U") upgrade;;
 				"-uU") update && upgrade;;
 				"-I") install;;
+				"-C") configRealm; configSSSD; configCommon; configRealm;;
+				"--install-all") update; install; configRealm; configSSSD; configCommon; configRealm;;
 		    	*)  echo "* Comando inexistente *" && help;;
 				"") help;;
 		  	esac
