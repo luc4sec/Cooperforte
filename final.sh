@@ -25,7 +25,7 @@ function upgrade () {
 }
 
 function install () {
-	apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit 1>> /registro.log
+	apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit openssh-server 1>> /registro.log
 }
 
 function configRealm () {
@@ -53,7 +53,7 @@ id_provider = ad
 krb5_store_password_if_offline = True
 default_shell = /bin/bash
 ldap_id_mapping = true
-use_fully_qualified_names = false
+use_fully_qualified_names = False
 fallback_homedir = /home/%u
 access_provider = ad
 ad_gpo_access_control = permissive
@@ -64,6 +64,7 @@ function configCommon () {
 	echo "---Editando common-session---"
 	cp /etc/pam.d/common-session /etc/pam.d/common-session.old
 	echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
+	systemctl restart sssd
 }
 
 function configSudoers () {
