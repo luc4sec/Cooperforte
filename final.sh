@@ -37,7 +37,6 @@ function configRealm () {
 function configSSSD () {
 	echo "---Editando arquivo sssd.conf---"
 	cp /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
-	touch sssd.conf
 	echo "
 [sssd]
 domains = cooperforte.coop
@@ -57,7 +56,7 @@ use_fully_qualified_names = False
 fallback_homedir = /home/%u
 access_provider = ad
 ad_gpo_access_control = permissive
-" > sssd.conf
+" > /etc/sssd/sssd.conf
 }
 
 function configCommon () {
@@ -72,6 +71,7 @@ function configSudoers () {
 	cp /etc/sudoers /etc/sudoers.old
 	echo "%desenlinux ALL=(ALL) ALL" >> /etc/sudoers
 }
+
 if [ "$1" != "" ]; then
 	if [ `whoami` == 'root' ]; then
 		for arg in "$@"; do
