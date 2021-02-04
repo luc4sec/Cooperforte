@@ -36,7 +36,7 @@ function configRealm () {
 
 function configSSSD () {
 	echo "---Editando arquivo sssd.conf---"
-	mv /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
+	cp /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
 	touch sssd.conf
 	echo "
 [sssd]
@@ -62,13 +62,13 @@ ad_gpo_access_control = permissive
 
 function configCommon () {
 	echo "---Editando common-session---"
-	mv /etc/pam.d/common-session /etc/pam.d/common-session.old
+	cp /etc/pam.d/common-session /etc/pam.d/common-session.old
 	echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
 }
 
 function configSudoers () {
 	echo "---Adicionando usuário como root---"
-	mv /etc/sudoers /etc/sudoers.old
+	cp /etc/sudoers /etc/sudoers.old
 	echo "%desenlinux ALL=(ALL) ALL" >> /etc/sudoers
 }
 if [ "$1" != "" ]; then
