@@ -37,7 +37,27 @@ function configRealm () {
 function configSSSD () {
 	echo "---Editando arquivo sssd.conf---"
 	mv /etc/sssd/sssd.conf /etc/sssd/sssd.conf.old
-	cp sssd.conf /etc/sssd/
+	touch sssd.conf
+	echo "
+[sssd]
+domains = cooperforte.coop
+config_file_version = 2
+services = nss, pam
+
+[domain/cooperforte.coop]
+ad_domain = cooperforte.coop
+krb5_realm = COOPERFORTE.COOP
+realmd_tags = manages-system joined-with-adcli
+cache_credentials = True
+id_provider = ad
+krb5_store_password_if_offline = True
+default_shell = /bin/bash
+ldap_id_mapping = true
+use_fully_qualified_names = false
+fallback_homedir = /home/%u
+access_provider = ad
+ad_gpo_access_control = permissive
+" > sssd.conf
 }
 
 function configCommon () {
@@ -74,3 +94,11 @@ if [ "$1" != "" ]; then
 else
 	help
 fi
+
+
+
+
+
+
+## O que fazer? ##
+# Criar função de validação
