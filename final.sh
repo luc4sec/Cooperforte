@@ -1,5 +1,5 @@
 #!/bin/bash
-#Versão 0.2
+#Versão 1.0 - Funcional
 
 function help () {
 	echo "
@@ -9,6 +9,8 @@ function help () {
 	-u, --update		Atualizar lista de pacotes
 	-U, --upgrade 		Atualizar aplicativos
 	-uU, 				Atualizar pacortes e aplicativos
+	-C, 				Configurar todos os aplicativos
+	--install-all, 		Instalar e configurar tudo
 	"
 
 }
@@ -62,7 +64,7 @@ ad_gpo_access_control = permissive
 function configCommon () {
 	echo "---Editando common-session---"
 	cp /etc/pam.d/common-session /etc/pam.d/common-session.old
-	echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
+	echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
 	systemctl restart sssd
 }
 
@@ -70,6 +72,15 @@ function configSudoers () {
 	echo "---Adicionando usuário como root---"
 	cp /etc/sudoers /etc/sudoers.old
 	echo "%desenlinux ALL=(ALL) ALL" >> /etc/sudoers
+	echo "%Grupo\ Sutec ALL=(ALL) ALL" >> /etc/sudors
+}
+
+function forticlient(){
+	echo "---Instlado Forticlient---"
+	wget -O - https://repo.fortinet.com/repo/6.4/ubuntu/DEB-GPG-KEY | sudo apt-key add -
+	echo "deb https://repo.fortinet.com/repo/6.4/ubuntu/ bionic multiverse"	>> /etc/apt/sources.list
+	update;
+
 }
 
 if [ "$1" != "" ]; then
@@ -82,9 +93,9 @@ if [ "$1" != "" ]; then
 				"-u") update;;
 				"-U") upgrade;;
 				"-uU") update && upgrade;;
-				"-I") install;;
+				"-I") install; forticlient;;
 				"-C") configRealm; configSSSD; configCommon; configSudoers;;
-				"--install-all") update; install; configRealm; configSSSD; configCommon; configSudoers;;
+				"--install-all") update; install; configRealm; configSSSD; configCommon; configSudoers; forticlient;;
 		    	*)  echo "* Comando inexistente *" && help;;
 				"") help;;
 		  	esac
