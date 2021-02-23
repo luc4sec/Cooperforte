@@ -1,17 +1,49 @@
 #!/bin/bash
-#Versão 1.0 - Funcional
+#
+# __________________________________________________________________________
+#
+# autoconfi.sh - Automatizador de Configuração de rede padrão Cooperforte
+# 
+# ---------------------------------------------------------------------------
+# Como Usar? 
+#	1. chmod +x autoconfi.sh
+#	2. ./autoconfi.sh
+#
+# Exemplos:
+#	$ sudo ./autoconfi.sh --help
+# 	# ./autoconfi.sh --help
+#	# ./autoconfi.sh --install-all
+# ---------------------------------------------------------------------------
+#
+# Histório:
+#  v1.0 10/02/2021, Lucas Nascimento:
+#	- Versão inicial funcional
+#  v1.2 23/02/2021, Lucas Nascimento
+#	- Correção de bugs em configCommon, Correção de bugs em configRealm
+#
+# ---------------------------------------------------------------------------
+#
+# O que fazer:
+#	- Validar configurações
+#	- Barra de carregamento
+#
+# ---------------------------------------------------------------------------- 
+# ___________________________________________________________________________
+#
+
 
 function help () {
 	echo "
 
 
 	-h, --help			Manual de ajuda
-	-u, --update		Atualizar lista de pacotes
-	-U, --upgrade 		Atualizar aplicativos
+	-u, --update		        Atualizar lista de pacotes
+	-U, --upgrade 		        Atualizar aplicativos
 	-uU, 				Atualizar pacortes e aplicativos
 	-C, 				Configurar todos os aplicativos
-	--install-all, 		Instalar e configurar tudo
+	--install-all, 		        Instalar e configurar tudo
 	"
+	exit 1
 
 }
 
@@ -19,21 +51,25 @@ function update () {
 	echo "* Atualizando pacotes *"
 	apt update
 	apt list --upgradable
+	exit 2
 }
 
 function upgrade () {
 	echo "* Atualizando sistema *"
 	apt upgrade -y
+	exit 3
 }
 
 function install () {
-	apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit openssh-server 1>> /registro.log
+	apt -y install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit openssh-server
+	exit 4
 }
 
 function configRealm () {
 	echo "Digite o usuário de rede: "
 	read user
-    realm join --user $user cooperforte.coop
+    	realm join -U $user cooperforte.coop -v
+    	exit 5
 }
 
 function configSSSD () {
@@ -59,6 +95,7 @@ fallback_homedir = /home/%u
 access_provider = ad
 ad_gpo_access_control = permissive
 " > /etc/sssd/sssd.conf
+	exit 6
 }
 
 function configCommon () {
@@ -66,6 +103,7 @@ function configCommon () {
 	cp /etc/pam.d/common-session /etc/pam.d/common-session.old
 	echo "session optional   pam_mkhomedir.so skel = /etc/skel/ mask=0077 " >> /etc/pam.d/common-session
 	systemctl restart sssd
+	exit 7
 }
 
 function configSudoers () {
@@ -73,6 +111,7 @@ function configSudoers () {
 	cp /etc/sudoers /etc/sudoers.old
 	echo "%desenlinux ALL=(ALL) ALL" >> /etc/sudoers
 	echo "%Grupo\ Sutec ALL=(ALL) ALL" >> /etc/sudors
+	exit 8
 }
 
 function forticlient(){
@@ -80,6 +119,7 @@ function forticlient(){
 	wget -O - https://repo.fortinet.com/repo/6.4/ubuntu/DEB-GPG-KEY | sudo apt-key add -
 	echo "deb https://repo.fortinet.com/repo/6.4/ubuntu/ bionic multiverse"	>> /etc/apt/sources.list
 	update;
+	exit 9
 
 }
 
@@ -88,8 +128,9 @@ if [ "$1" != "" ]; then
 		for arg in "$@"; do
 		  	shift
 		 	case "$arg" in
-		    	"-h") help ;;
-		    	"--help") help;;
+				"") help;;
+		    		"-h") help ;;
+		    		"--help") help;;
 				"-u") update;;
 				"-U") upgrade;;
 				"-uU") update && upgrade;;
@@ -97,11 +138,13 @@ if [ "$1" != "" ]; then
 				"-C") configRealm; configSSSD; configCommon; configSudoers;;
 				"--install-all") update; install; configRealm; configSSSD; configCommon; configSudoers; forticlient;;
 		    	*)  echo "* Comando inexistente *" && help;;
-				"") help;;
+			exit 10
+				
 		  	esac
 		done
 	else
             echo "É necessário logar com root (sudo ./setup install)"
+	    exit 0
     fi
 else
 	help
