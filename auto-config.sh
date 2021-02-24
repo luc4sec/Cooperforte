@@ -2,17 +2,17 @@
 #
 # __________________________________________________________________________
 #
-# autoconfi.sh - Automatizador de Configuração de rede padrão Cooperforte
+# auto-config.sh - Automatizador de Configuração de rede padrão Cooperforte
 # 
 # ---------------------------------------------------------------------------
 # Como Usar? 
-#	1. chmod +x autoconfi.sh
-#	2. ./autoconfi.sh
+#	1. chmod +x auto-config.sh
+#	2. ./auto-config.sh
 #
 # Exemplos:
-#	$ sudo ./autoconfi.sh --help
-# 	# ./autoconfi.sh --help
-#	# ./autoconfi.sh --install-all
+#	$ sudo ./auto-config.sh --help
+# 	# ./auto-config.sh --help
+#	# ./auto-config.sh --install-all
 # ---------------------------------------------------------------------------
 #
 # Histório:
@@ -149,11 +149,3 @@ if [ "$1" != "" ]; then
 else
 	help
 fi
-
-
-
-
-
-
-## O que fazer? ##
-# Criar função de validação
